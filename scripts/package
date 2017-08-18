@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-ARCH=${ARCH:-"amd64"}
+ARCH=${ARCH:?"ARCH not set"}
 SUFFIX=""
 [ "${ARCH}" != "amd64" ] && SUFFIX="_${ARCH}"
 
@@ -11,13 +12,9 @@ cd $(dirname $0)/../package
 TAG=${TAG:-${VERSION}${SUFFIX}}
 REPO=${REPO:-rancher}
 
-if $(echo ${TAG} | grep -q dirty); then
-    TAG=dev
-fi
-
 cp ../bin/rancher-metadata .
-docker build -t ${REPO}/metadata:${TAG} .
 
-mkdir -p ../dist
-echo ${REPO}/metadata:${TAG} > ../dist/images
-echo Built ${REPO}/metadata:${TAG}
+IMAGE=${REPO}/metadata:${TAG}
+docker build -t ${IMAGE} .
+echo ${IMAGE} > ../dist/images
+echo Built ${IMAGE}
