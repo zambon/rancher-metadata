@@ -1,4 +1,5 @@
 FROM ppc64le/golang:1.7.6
+ENV ARCH ppc64le
 RUN go get github.com/rancher/trash
 RUN go get github.com/golang/lint/golint
 RUN curl -sL https://github.com/zambon/moby/releases/download/v1.10.3/docker-1.10.3_ppc64le > /usr/bin/docker && \
