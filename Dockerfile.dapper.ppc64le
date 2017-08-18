@@ -1,0 +1,15 @@
+FROM ppc64le/golang:1.7.4
+RUN go get github.com/rancher/trash
+RUN go get github.com/golang/lint/golint
+RUN curl -sL DOCKER_URL=https://github.com/zambon/moby/releases/download/v1.10.3/docker-1.10.3_ppc64le > /usr/bin/docker && \
+    chmod +x /usr/bin/docker
+ENV PATH /go/bin:$PATH
+ENV DAPPER_SOURCE /go/src/github.com/rancher/rancher-metadata
+ENV DAPPER_OUTPUT bin dist
+ENV DAPPER_DOCKER_SOCKET true
+ENV DAPPER_ENV TAG REPO
+ENV GO15VENDOREXPERIMENT 1
+ENV TRASH_CACHE ${DAPPER_SOURCE}/.trash-cache
+WORKDIR ${DAPPER_SOURCE}
+ENTRYPOINT ["./scripts/entry"]
+CMD ["ci"]
